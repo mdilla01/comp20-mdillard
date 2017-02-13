@@ -1,5 +1,5 @@
 @media screen
-	and (min-device-width: 1400px){
+	and (min-width: 1400px){
 		.ralphy {
 			width: 250px;
 			height: 187px;
@@ -8,8 +8,8 @@
 	}
 
 @media screen
-	and (min-device-width: 1200px)
-	and (max-device-width: 1400px){
+	and (min-width: 1200px)
+	and (max-width: 1400px){
 		.ralphy {
 			width:250px;
 			height: 187px;
@@ -18,18 +18,18 @@
 	}
 
 @media screen
-	and (min-device-width: 1000px)
-	and (max-device-width: 1200px){
+	and (min-width: 1000px)
+	and (max-width: 1200px){
 		.ralphy {
 			width: 250px;
 			height: 187px;
-			background:url(ralphy.gif) 0px 187px;
+			background:url(ralphy.gif) 0px -187px;
 		}
 	}
 
 @media screen
-	and (min-device-width: 800px)
-	and (max-device-width: 1000px){
+	and (min-width: 800px)
+	and (max-width: 1000px){
 		.ralphy {
 			width: 250px;
 			height: 187px;
@@ -38,8 +38,8 @@
 	}
 
 @media screen
-	and (min-device-width: 600px)
-	and (max-device-width: 800px){
+	and (min-width: 600px)
+	and (max-width: 800px){
 		.ralphy {
 			width: 250px;
 			height: 187px;
@@ -48,7 +48,7 @@
 	}
 
 @media screen
-	and (max-device-width: 600px){
+	and (max-width: 600px){
 		.ralphy {
 			width: 250px;
 			height: 187px;
