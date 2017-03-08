@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Black Car Service</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="styles.css" type="text/css" />
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+
+	<script>
+		var myLat = 0;
+		var myLng = 0;
+		var request = new XMLHttpRequest();
+		var me = new google.maps.LatLng(myLat, myLng);
+		var map;
+		var marker;
+		var infowindow = new google.maps.InfoWindow();
+		var myOptions = {
+			zoom: 16,
+			center: me,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+		var image = "Dill.jpg";
+		image.width = image.width / 20;
+		image.height = image.height / 20;
+
+		function init(){
+			map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+			getMyLocation();
+		}
+
+		function getMyLocation(){
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(position){
+					myLat = position.coords.latitude;
+					myLng = position.coords.longitude;
+					renderMap();
+				});
+			}
+			else {
+				alert("Geolocation is not supported on your browser");
+			}
+		}
+
+		function renderMap(){
+			me = new google.maps.LatLng(myLat, myLng);
+
+			map.panTo(me);
+
+			marker = new google.maps.Marker({
+				position: me,
+				title: "mdilla01",
+				icon: image
+			});
+			marker.setMap(map);
+
+			google.maps.event.addListener(marker, 'click', function(){
+				infowindow.setContent(marker.title);
+				infowindow.open(map, marker);
+			});
+		}
+	</script>
+</head>
+
+<body onload="init()">
+	<div id="map-canvas""></div>
+</body>
+
+</html>
