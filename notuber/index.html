@@ -78,24 +78,48 @@
 		}
 
 		function findOthers(){
-			// for vehicles
-			for (var i = 0; i < others.passengers.length; i++){
-				var other = new google.maps.LatLng(others.passengers[i].lat, others.passengers[i].lng);
-				marker = new google.maps.Marker({
-					position: other,
-					title: others.passengers[i].username,
-					icon: "black_car.png"
-				});
-				marker.setMap(map);
+			// to find passengers
+			if (others.passengers !== null){
+				for (var i = 0; i < others.passengers.length; i++){
+					var other = new google.maps.LatLng(others.passengers[i].lat, others.passengers[i].lng);
+					var distance = google.maps.geometry.spherical.computeDistanceBetween(me, other);
+					distance = distance * 0.000621371;
 
-				var distance = google.maps.geometry.spherical.computeDistanceBetween(me, other);
-				distance = distance * 0.000621371;
+					marker = new google.maps.Marker({
+						position: other,
+						title: others.passengers[i].username,
+						icon: "passenger.png",
+						content: distance
+					});
+					marker.setMap(map);
 
-				infowindow = new google.maps.InfoWindow();
-				google.maps.event.addListener(marker, 'click', function(){
-					infowindow.setContent("username: " + this.title + "<br />" + distance + " miles");
-					infowindow.open(map, this);
-				});
+					infowindow = new google.maps.InfoWindow();
+					google.maps.event.addListener(marker, 'click', function(){
+						infowindow.setContent("username: " + this.title + "<br />" + this.content + " miles");
+						infowindow.open(map, this);
+					});
+				}
+			}
+			// to find drivers
+			else if (others.vehicles !== null){
+				for (var i = 0; i < others.vehicles.length; i++){
+					var other = new google.maps.LatLng(others.vehicles[i].lat, others.vehicles[i].lng);
+					var distance = google.maps.geometry.spherical.computeDistanceBetween(me, other);
+					distance = distance * 0.000621371;
+					marker = new google.maps.Marker({
+						position: other,
+						title: others.vehicles[i].username,
+						icon: "black_car.png",
+						content: distance
+					});
+					marker.setMap(map);
+
+					infowindow = new google.maps.InfoWindow();
+					google.maps.event.addListener(marker, 'click', function(){
+						infowindow.setContent("username: " + this.title + "<br />" + this.content + " miles");
+						infowindow.open(map, this);
+					});
+				}
 			}
 		}
 	</script>
