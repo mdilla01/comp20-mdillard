@@ -20,9 +20,20 @@
 			center: me,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
-		var image = "Dill.jpg";
-		image.width = image.width / 20;
-		image.height = image.height / 20;
+		var vehicles;
+
+		var request = new XMLHttpRequest();
+		var params = "username=u48FRAF7&lat=" + myLat + "&lng=" + myLng;
+		request.open("POST", "https://defense-in-derpth.herokuapp.com/submit", true);
+		request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		request.onreadystatechange = function(){
+			if (request.readyState == 4 && request.status == 200){
+				vehicles = JSON.parse(request.responseText);
+				console.log(vehicles);
+			}
+		}
+		request.send(params);
+
 
 		function init(){
 			map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
@@ -43,14 +54,15 @@
 		}
 
 		function renderMap(){
+			// for me, a passenger
 			me = new google.maps.LatLng(myLat, myLng);
 
 			map.panTo(me);
 
 			marker = new google.maps.Marker({
 				position: me,
-				title: "mdilla01",
-				icon: image
+				title: "u48FRAF7",
+				icon: "Donatello.jpg"
 			});
 			marker.setMap(map);
 
@@ -58,6 +70,22 @@
 				infowindow.setContent(marker.title);
 				infowindow.open(map, marker);
 			});
+
+			// for vehicles
+			for (var i = 0; i < vehicles.length; i++){
+				var car = new google.maps.LatLng(vehicles[i].lat, vehicles[i].lng);
+				marker = new google.maps.Marker({
+					position: car,
+					title: vehicles[i].username,
+					icon: "black_car.png"
+				});
+				marker.setMap(map);
+
+				google.maps.event.addListener(marker, 'click', function(){
+					infowindow.setContent(marker.title);
+					infowindow.open(map, marker);
+				});
+			}
 		}
 	</script>
 </head>
