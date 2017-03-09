@@ -5,7 +5,7 @@
 	<title>Black Car Service</title>
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="styles.css" type="text/css" />
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true&libraries=geometry"></script>
 
 	<script>
 		var myLat = 0;
@@ -14,13 +14,13 @@
 		var me = new google.maps.LatLng(myLat, myLng);
 		var map;
 		var marker;
-		var infowindow = new google.maps.InfoWindow();
+		var infowindow;
 		var myOptions = {
 			zoom: 16,
 			center: me,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
-		var vehicles = [];
+		var others;
 
 
 		function init(){
@@ -55,9 +55,11 @@
 			});
 			marker.setMap(map);
 
+			infowindow = new google.maps.InfoWindow();
+
 			google.maps.event.addListener(marker, 'click', function(){
-				infowindow.setContent(marker.title);
-				infowindow.open(map, marker);
+				infowindow.setContent(this.title);
+				infowindow.open(map, this);
 			});
 		}
 
@@ -68,33 +70,31 @@
 			request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			request.onreadystatechange = function(){
 				if (request.readyState == 4 && request.status == 200){
-					vehicles = JSON.parse(request.responseText);
-					console.log(vehicles);
-					findCars(vehicles);
+					others = JSON.parse(request.responseText);
+					findOthers();
 				}
 			}
 			request.send(params);
 		}
 
-		function findCars(vehicles){
+		function findOthers(){
 			// for vehicles
-			console.log(vehicles);
-			console.log(vehicles.length);
-			for (var i = 0; i < vehicles.length; i++){
-				console.log("looping");
-				var car = new google.maps.LatLng(vehicles[i].lat, vehicles[i].lng);
+			for (var i = 0; i < others.passengers.length; i++){
+				var other = new google.maps.LatLng(others.passengers[i].lat, others.passengers[i].lng);
 				marker = new google.maps.Marker({
-					position: car,
-					title: vehicles[i].username,
+					position: other,
+					title: others.passengers[i].username,
 					icon: "black_car.png"
 				});
 				marker.setMap(map);
 
-				var distance = computeDistanceBetween(me, car) / 1609;
+				var distance = google.maps.geometry.spherical.computeDistanceBetween(me, other);
+				distance = distance * 0.000621371;
 
+				infowindow = new google.maps.InfoWindow();
 				google.maps.event.addListener(marker, 'click', function(){
-					infowindow.setContent("username: " + marker.title + "<br />");
-					infowindow.open(map, marker);
+					infowindow.setContent("username: " + this.title + "<br />" + distance + " miles");
+					infowindow.open(map, this);
 				});
 			}
 		}
