@@ -80,7 +80,7 @@
 
 		function findOthers(){
 			// to find passengers
-			if (others.passengers !== null){
+			if (others.passengers !== null && typeof others.passengers != "undefined"){
 				console.log(others.passengers);
 				for (var i = 0; i < others.passengers.length; i++){
 					var other = new google.maps.LatLng(others.passengers[i].lat, others.passengers[i].lng);
