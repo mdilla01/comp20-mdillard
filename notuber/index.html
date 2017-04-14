@@ -104,7 +104,6 @@
 			}
 			// to find drivers
 			else if (others.vehicles !== null){
-				console.log(others.vehicles.length);
 				for (var i = 0; i < others.vehicles.length; i++){
 					var other = new google.maps.LatLng(others.vehicles[i].lat, others.vehicles[i].lng);
 					var distance = google.maps.geometry.spherical.computeDistanceBetween(me, other);
