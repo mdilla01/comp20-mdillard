@@ -81,6 +81,7 @@
 		function findOthers(){
 			// to find passengers
 			if (others.passengers !== null){
+				console.log(others.passengers);
 				for (var i = 0; i < others.passengers.length; i++){
 					var other = new google.maps.LatLng(others.passengers[i].lat, others.passengers[i].lng);
 					var distance = google.maps.geometry.spherical.computeDistanceBetween(me, other);
