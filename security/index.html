@@ -5,22 +5,45 @@
 <meta charset="utf-8">
 </head>
 <body>
-	<h1>Assignment 4</h1>
+	<h1>Assignment 4 - mdilla01</h1>
 	<h2>Introduction</h2>
 		<p>This product is a web service that allows passengers to find drivers in their area, and vice versa. The program uses Google Maps API to identify the users location, and displays the user along with other users &lpar;either drivers or passengers depending on what the user is&rpar; on a map.</p>
 		<p>I was hired as a security consultant to find any and all security and privacy problems in the program. These may include but are not limited to Cross Site Scripting, hidden fields, and bypassing restrictions on input choices</p>
 	<h2>Methodology</h2>
-		<p>First, I conducted a &ldquo;black box&rdquo; test of the product. This consisted of my attempts to attack the site without reading the source code. I attacked commonly vulnerable areas of the program, such as input fields and queries.</p>
-		<p>Next, I conducted a &ldquo;white box&rdquo; test of the product. This involved a review of the product&rsquo;s source code. This is where I would find vulnerability issues such as hidden fields.</p>
+		<p>First, I conducted a &quot;black box&quot; test of the product. This consisted of my attempts to attack the site without reading the source code. I attacked commonly vulnerable areas of the program, such as input fields and queries.</p>
+		<p>Next, I conducted a &quot;white box&quot; test of the product. This involved a review of the product&rsquo;s source code. This is where I would find vulnerability issues such as hidden fields.</p>
 	<h2>Abstract of Findings</h2>
-		<p>...</p>
+		<p>There are a few issues that make this web application unsafe for launch. These issues involve the security and vulnerability of user data and the server. Hackers could attack users through cross-site scripting and user impersonation. In addition, hackers can access the server data directly, because Cross-Origin Resource Sharing is enabled for all requests. </p>
 	<h2>Issues Found</h2>
-		<ul>
+		<ol>
 			<li>XSS in /submit route input field username</li>
-		</ul>
+			<ul>
+				<li>Severity: High - Someone could inject javascript into the database, causing the javascript to run when a user loads the route of the program. Users could be subject to malicious data and websites without knowing they are being attacked.</li>
+				<li>The problem was found using curl, where javscript was substituted into the username input field. The code used is seen here:<br>
+				<img src="images/hack1.PNG" alt="code used in XSS hack"><br>
+				As you can see below, this resulted in a pop-up on users' screens when accessing the / route. Though this is a pretty mild hack, somebody could inject any javascript they wanted, so real attacks could be much more deceitful.<br>
+				<img src="images/img1.PNG" alt="hacked website"></li>
+				<li>This vulnerability could be fixed by checking users' input and removing any special characters like &quot;&lt;&quot; or &quot;&gt;&quot;.</li>
+			</ul>
+			<li>User Authentication in /submit</li>
+			<ul>
+				<li>Severity: Low - To post data, a user is only required to input a user name with their data. This could result in people claiming to be someone they are not. In addition, to edit someone else's information, all someone needs to know is the person's username.</li>
+				<li>The problem was found by looking at the source code of the server. I found that when someone inputs the same username, the data is automatically updated without verifying that the original person is making the update. This can be seen from this code snippet:<br>
+				<img src="images/img2.PNG" alt="vulnerable code"></li>
+				<li>This vulnerability can be fixed by requiring a password for all users who are attempting to input or access data.</li>
+			</ul>
+			<li>CORS enabled for all requests</li>
+			<ul>
+				<li>Severity: Medium - This allows anyone to make server requests to index.js. This can be problematic because attackers may be able to access and manipulate the servers and their data directly.</li>
+				<li>The vulnerability was found by looking at the source code of the server. It uses a CORS dependency, but doesn't configure any of the CORS options to restrict who can access the server. Instead, it makes enables CORS for all requests. This can be seen in lines 2 and 10 in the code below<br>
+				<img src="images/img3.PNG" alt="CORS enabled for all requests"></li>
+				<li>This problem can be fixed by restricting who can access the server using CORS. This can be done by creating a whitelist of allowed origins, and then editing the CORS Options, as seen in the example below (taken from www.npmjs.com):<br>
+				<img src="images/fix3.PNG" alt="restricting CORS"></li>
+			</ul>
+		</ol>
 	<h2>Conclusion</h2>
-		<p>...</p>
+		<p>While these issues are very important to the security of both the users and the server itself, they are relatively easy to fix. The application should not be released until these flaws are taken care of. These should be reatively quick and inexpensive. As a general rule, you should never trust user input. Therefore, if you decide to add more features in the future, always be sure to check users' input for suspicious characters.</p>
 	<h2>References</h2>
-		<p>...</p>
+		<p><a href="https://www.npmjs.com/package/cors">https://www.npmjs.com/package/cors</a></p>
 </body>
 </html>
